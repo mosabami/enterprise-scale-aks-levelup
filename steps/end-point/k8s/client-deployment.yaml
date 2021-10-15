@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 2
+  selector: 
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels: 
+        component: web
+    spec:
+      containers:
+        - name: client
+          image: mosabami/multi-client
+          ports: 
+            - containerPort: 3000
+          # readinessProbe: # is the container ready to receive traffic?
+          #   initialDelaySeconds: 10
+          #   httpGet:
+          #     port: 3000
+          #     path: /healthz
+          # livenessProbe: # is the container healthy?
+          #   initialDelaySeconds: 2
+          #   periodSeconds: 5
+          #   httpGet:
+          #     port: 3000
+          #     path: /healthz

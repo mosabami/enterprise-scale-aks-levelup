@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+  name: redis-deployment
+
+spec:
+  replicas: 1
+  selector: 
+    matchLabels:
+      component: redis
+  template:
+    metadata:
+      labels: 
+        component: redis
+    spec: 
+      containers:
+        - name: redis
+          image: redis
+          ports:
+            - containerPort: 6379
+          readinessProbe: # is the container ready to receive traffic?
+            initialDelaySeconds: 10
+            httpGet:
+              port: 6379
+              path: /healthz
+          livenessProbe: # is the container healthy?
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            httpGet:
+              port: 6379
+              path: /healthz

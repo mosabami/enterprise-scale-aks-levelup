@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+
+kind: Deployment
+metadata:
+  name: worker-deployment
+
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: worker
+  template:
+    metadata:
+      labels:
+        component: worker
+    spec:
+      containers:
+        - name: worker
+          image: mosabami/multi-worker
+          env:
+            - name: REDIS_HOST
+              value: redis-cluster-ip-service
+            - name: REDIS_PORT
+              value: '6379'
+          readinessProbe: # is the container ready to receive traffic?
+            initialDelaySeconds: 10
+            httpGet:
+              port: 3000
+              path: /healthz
+          livenessProbe: # is the container healthy?
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            httpGet:
+              port: 3000
+              path: /healthz
+
