@@ -13,7 +13,7 @@ Repository for the Enterprise Scale for AKS LevelUp training.
 
 - Azure tenant     where you have user access admin and contributor role at the AAD level     (you will need this for parts of the workshop to follow along or you can     just attend and watch)
 
- 
+- Docker Desktop installed and running on your computer 
 
 **Customer scenario:**
 
