@@ -2,9 +2,9 @@
 
 During the workshop, we want to go over the 6 critical design areas that apply to Enterprise scale for AKS and make design decisions there. We will quickly go over the excel format:
 
-[Enterprise-Scale-for-AKS sample workshop template](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/materials/AKS construction set workshop checklist.xlsx)
+[Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
 
-[ADO template project](https://dev.azure.com/cts-dem-demoorg/CTS-DEM-Playbooks/_backlogs/backlog/CTS-DEM-Playbooks%20Team/Epics)
+[ADO template project](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/materials/)
 
 
 
