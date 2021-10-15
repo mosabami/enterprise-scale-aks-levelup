@@ -4,9 +4,7 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 
 [Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
 
-[ADO template project](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/materials/)
-
-
+[ADO template project](https://dev.azure.com/cts-dem-demoorg/CTS-DEM-Playbooks/_backlogs/backlog/CTS-DEM-Playbooks%20Team/Epics)
 
 :arrow_forward: [Build Enterprise scale landing zone using Private cluster Terraform Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform)
 
