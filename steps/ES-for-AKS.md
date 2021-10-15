@@ -12,7 +12,7 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 
 :arrow_forward:[Create a policy so the cluster can only pull images from ACR ](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/Azure-Policy-ES-for-AKS)
 
-:arrow_forward:[Modify deployment using ES for AKS](./steps/ES-for-AKS/deployment/README.md)
+:arrow_forward:[Modify deployment using ES for AKS](./steps/deployment/README.md)
 
 
 
