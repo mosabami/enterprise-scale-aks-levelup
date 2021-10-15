@@ -64,4 +64,4 @@ One of their software developers has been assigned to begin development of this 
 5. Service Mesh
 6. Connection to onprem resources
 
-:arrow_forward: [Simulate ES for AKS workshop to gather customer requirements and make architectural decisions](./steps/ES-for-AKS)
+:arrow_forward: [Simulate ES for AKS workshop to gather customer requirements and make architectural decisions](./steps/ES-for-AKS.md)
