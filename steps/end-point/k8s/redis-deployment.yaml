@@ -14,19 +14,15 @@ spec:
       labels: 
         component: redis
     spec: 
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-persistent-volume-claim
       containers:
         - name: redis
           image: redis
           ports:
             - containerPort: 6379
-          readinessProbe: # is the container ready to receive traffic?
-            initialDelaySeconds: 10
-            httpGet:
-              port: 6379
-              path: /healthz
-          livenessProbe: # is the container healthy?
-            initialDelaySeconds: 2
-            periodSeconds: 5
-            httpGet:
-              port: 6379
-              path: /healthz
+          volumeMounts:
+            - name: redis-storage
+              mountPath:  "/data"

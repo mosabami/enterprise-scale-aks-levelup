@@ -18,14 +18,25 @@ spec:
           image: mosabami/multi-client
           ports: 
             - containerPort: 3000
-          # readinessProbe: # is the container ready to receive traffic?
-          #   initialDelaySeconds: 10
-          #   httpGet:
-          #     port: 3000
-          #     path: /healthz
-          # livenessProbe: # is the container healthy?
-          #   initialDelaySeconds: 2
-          #   periodSeconds: 5
-          #   httpGet:
-          #     port: 3000
-          #     path: /healthz
+          readinessProbe: # is the container ready to receive traffic?
+            initialDelaySeconds: 10
+            httpGet:
+              port: 3000
+              path: /healthz
+          livenessProbe: # is the container healthy?
+            initialDelaySeconds: 2
+            periodSeconds: 5
+            httpGet:
+              port: 3000
+              path: /healthz
+          volumeMounts:
+          - name: aks-tls-akv
+            mountPath: /mnt/secrets-store
+            readOnly: true
+      volumes:
+        - name: aks-tls-akv
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "aks-tls-akv"

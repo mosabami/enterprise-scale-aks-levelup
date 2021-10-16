@@ -16,17 +16,22 @@ spec:
       containers:
         - name: server
           image: mosabami/multi-server:v2
+          imagePullPolicy: Always
+          volumeMounts:
+          - name: secrets-store-inline
+            mountPath: "/mnt/secrets-store"
+            readOnly: true
           ports:
             - containerPort: 5000
           env:
             - name: REDIS_HOST
-              value: redis-cluster-ip-service
+              value:  redis-cluster-ip-service
             - name: REDIS_PORT
               value: '6379'
             - name: PGUSER
-              value: postgres
+              value: postgres@awesonepost
             - name: PGHOST
-              value: postgres-cluster-ip-service
+              value: 10.1.16.101
             - name: PGPORT
               value: '5432'
             - name: PGDATABASE
@@ -34,6 +39,16 @@ spec:
             - name: PGPASSWORD
               valueFrom: 
                 secretKeyRef: 
-                  name: pgpasswordd
+                  name: pgpassword
                   key: PGPASSWORD
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "postgres-secret-csi"
+
+
+
 

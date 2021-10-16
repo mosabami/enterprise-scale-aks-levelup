@@ -1,0 +1,130 @@
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: service1
+  name: service1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service1
+  template:
+    metadata:
+      labels:
+        app: service1
+    spec:
+      containers:
+      - image: iamnoah4real/saywhat
+        name: say-what
+        env:
+        - name: RESPONSE_MESSAGE
+          value: "hello from service 1"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 30
+          failureThreshold: 2
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service1
+spec:
+  selector:
+    app: service1
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+
+---
+
+
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: service2
+  name: service2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: service2
+  template:
+    metadata:
+      labels:
+        app: service2
+    spec:
+      containers:
+      - image: iamnoah4real/saywhat
+        name: say-what
+        env:
+        - name: RESPONSE_MESSAGE
+          value: "hello from service 2"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 30
+          periodSeconds: 60
+          timeoutSeconds: 30
+          failureThreshold: 2
+        ports:
+        - containerPort: 3000
+          protocol: TCP
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: service2
+spec:
+  selector:
+    app: service2
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 3000
+---
+
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: service1
+  annotations:
+    kubernetes.io/ingress.class: azure/application-gateway
+    appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /service1
+        # UPDATE PATH
+        pathType: Prefix
+        # ADD PATHTYPE
+        backend:
+          service:
+            # UPDATE SERVICE FIELDS
+            name: service1
+            port:
+              number: 80
+      - path: /service2
+        # UPDATE PATH
+        pathType: Prefix
+        # ADD PATHTYPE
+        backend:
+          service:
+            # UPDATE SERVICE FIELDS
+            name: service2
+            port:
+              number: 80

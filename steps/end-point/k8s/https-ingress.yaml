@@ -5,24 +5,31 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: 'azure/application-gateway'
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
+    # appgw.ingress.kubernetes.io/backend-path-prefix: "/"
     # nginx.ingress.kubernetes.io/use-regex: 'true'
     # ADD ANNOTATION
     # nginx.ingress.kubernetes.io/rewrite-target: /$1
     # UPDATE ANNOTATION
 spec:
+  tls:
+    - hosts:
+      - fibcalculator.eastus.cloudapp.azure.com
+      secretName: aks-tls-akv
   rules:
-    - http:
+    - host: fibcalculator.eastus.cloudapp.azure.com
+      http:
         paths:
-          - path: /api/values/current
+          - path: /
             # UPDATE PATH
             pathType: Prefix
             # ADD PATHTYPE
             backend:
               service:
                 # UPDATE SERVICE FIELDS
-                name: server-cluster-ip-service
+                name: client-cluster-ip-service
                 port:
-                  number: 5000
+                  number: 3000
           - path: /api/values/all
             # UPDATE PATH
             pathType: Prefix
@@ -43,13 +50,13 @@ spec:
                 name: server-cluster-ip-service
                 port:
                   number: 5000
-          - path: /
+          - path: /api/values/current
             # UPDATE PATH
             pathType: Prefix
             # ADD PATHTYPE
             backend:
               service:
                 # UPDATE SERVICE FIELDS
-                name: client-cluster-ip-service
+                name: server-cluster-ip-service
                 port:
-                  number: 3000
+                  number: 5000
