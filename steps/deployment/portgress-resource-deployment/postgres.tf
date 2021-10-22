@@ -53,11 +53,11 @@ variable "location" {
 }
 
 variable "administrator_login" {
-    default = "psqladmin"
+    default = "postgres"
 }
 
 variable "administrator_login_password" {
-    default = "H@Sh1CoR3!"
+    default = "12345ASDf"
 }
 
 variable "auto_grow_enabled" {
