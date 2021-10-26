@@ -64,4 +64,12 @@ Repository for the Enterprise Scale for AKS LevelUp training.
 
    One of their software developers has been assigned to begin development of this application by creating a quick POC / MVP that can be used to test out the value of the product and ensure they are going in the right direction. Being experienced with React and Node JaveScript frameworks, he has created a very simple AKS cluster with no security or persistent storage and has developed a simple application to use for the POC that can calculate the numbers from 1 to 40. He used NGINX ingress controller because that is what the team is familiar with. His team has contacted you to help create a more secure cluster.
 
+   Below is a picture of the starting cluster the developer made
+
+   ![image-20211026151029007](./steps/deployment/media/start-state.png)
+
+By the end of the workshop, we would have used Enterprise-scale for AKS to create a more secure cluster that looks like this
+
+![image-20211026151029007](./steps/deployment/media/end-state.png)
+
 :arrow_forward: [Simulate ES for AKS workshop to gather customer requirements and make architectural decisions](./steps/ES-for-AKS.md)
