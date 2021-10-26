@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: client
-          image: mosabami/multi-client
+          image: acr87082.azurecr.io/multi-client
           ports: 
             - containerPort: 3000
           readinessProbe: # is the container ready to receive traffic?

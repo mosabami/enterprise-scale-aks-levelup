@@ -1,9 +1,7 @@
 apiVersion: apps/v1
-
 kind: Deployment
 metadata:
   name: redis-deployment
-
 spec:
   replicas: 1
   selector: 
@@ -20,7 +18,11 @@ spec:
             claimName: redis-persistent-volume-claim
       containers:
         - name: redis
-          image: redis
+          image: acr87082.azurecr.io/redis
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
           ports:
             - containerPort: 6379
           volumeMounts:

@@ -21,7 +21,7 @@ spec:
             backend:
               service:
                 # UPDATE SERVICE FIELDS
-                name: client-cluster-ip-service
+                name: client-service
                 port:
                   number: 3000
           - path: /api/values/all
@@ -31,7 +31,7 @@ spec:
             backend:
               service:
                 # UPDATE SERVICE FIELDS
-                name: server-cluster-ip-service
+                name: server-service
                 port:
                   number: 5000
           - path: /api/values
@@ -41,7 +41,7 @@ spec:
             backend:
               service:
                 # UPDATE SERVICE FIELDS
-                name: server-cluster-ip-service
+                name: server-service
                 port:
                   number: 5000
           - path: /api/values/current

@@ -21,9 +21,3 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 3000
-
-https://escalator-functions-xxxawesome.azurewebsites.net/api/HttpTrigger1?code=4FcketBBk2SxNPyZJqoDTfvKipeofyw0doYV2DnE2SSuO8knxTF9fw==
-4FcketBBk2SxNPyZJqoDTfvKipeofyw0doYV2DnE2SSuO8knxTF9fw==
-https://escalator-functions-xxxawesome.azurewebsites.net/api/HttpTrigger1?code=4FcketBBk2SxNPyZJqoDTfvKipeofyw0doYV2DnE2SSuO8knxTF9fw==
-
-curl --header "Content-Type: application/json" --header "x-functions-key: 4FcketBBk2SxNPyZJqoDTfvKipeofyw0doYV2DnE2SSuO8knxTF9fw==" --request POST --data "{\"name\": \"Azure Function\"}" https://escalator-functions-xxxawesome.azurewebsites.net/api/HttpTrigger1?code=4FcketBBk2SxNPyZJqoDTfvKipeofyw0doYV2DnE2SSuO8knxTF9fw==

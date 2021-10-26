@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: worker
-          image: mosabami/multi-worker
+          image: acr87082.azurecr.io/multi-server:v2
           env:
             - name: REDIS_HOST
               value: redis-cluster-ip-service

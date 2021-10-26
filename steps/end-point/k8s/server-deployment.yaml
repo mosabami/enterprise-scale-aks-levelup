@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: server
-          image: mosabami/multi-server:v2
+          image: acr87082.azurecr.io/multi-server:v2
           imagePullPolicy: Always
           volumeMounts:
           - name: secrets-store-inline
@@ -29,7 +29,7 @@ spec:
             - name: REDIS_PORT
               value: '6379'
             - name: PGUSER
-              value: postgres@awesonepost
+              value: postgres@postgresql-00000001
             - name: PGHOST
               value: 10.1.16.101
             - name: PGPORT
