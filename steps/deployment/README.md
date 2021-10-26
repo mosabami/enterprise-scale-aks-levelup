@@ -8,7 +8,7 @@ Now that you have completed creating the main Azure resources, the next step is 
 
 3. Follow the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#provide-yourself-access-to-create-secrets-in-your-key-vault) to provide yourself access to create secrets in Key vault (don't deploy the workload)
 
-4. SSH into the jumpbox you created using Visual Studio code using the instructions at the bottom of  [this page](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/04-network-hub.md). All the steps below need to be done from the jumpbox because your AKS, Key vault and ACR resources can only be accessed from within the same virtual network. We are using visual studio code because it is easy to manipulate files in your virtual machine using it.
+4. SSH into the jumpbox vm you created, using Visual Studio code using the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#option-1-connecting-into-the-server-dev-linux-vm-using-ssh-and-vs-code). All the steps below need to be done from the jumpbox because your AKS, Key vault and ACR resources can only be accessed from within the same virtual network. We are using visual studio code because it is easy to manipulate files in your virtual machine using it.
 
 5. Install the required tools in your new virtual machine using the instructions [here](./portgress-resource-deployment/setupVM.md)
 
@@ -19,7 +19,7 @@ Now that you have completed creating the main Azure resources, the next step is 
    cd enterprise-scale-aks-levelup
    ```
 
-7. Copy the content of the steps/starting-point folder in your cloned repo in the vm into the steps/deployment
+7. Copy the content of the steps/starting-point folder in your cloned repo in the vm into the steps/deployment folder.
 
 8. Get your ACR name and replace the placeholder below with your ACR name
 
@@ -34,16 +34,16 @@ Now that you have completed creating the main Azure resources, the next step is 
    code index.js
    ```
 
-10. Add "/api" to the begining of the paths in line 39,43,49,55. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it
+10. Add "/api" to the beginning of the paths in line 39,43,49,55. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it.
 
-11. Build the image for the server into the container registry you just created using the tag "v2"
+11. Build the image for the server into the container registry you just created using the tag "v2". the original version image did not have the "/api" at the beginning of the paths.
 
     ```bash
     sudo az acr login -n $ACR_NAME
     sudo docker build -t $ACR_NAME.azurecr.io/multi-server:v2 .
     ```
 
-12. Build image of the fib calculator microservice
+12. Build image of the calculator microservice
 
     ```bash
     cd ../worker
@@ -63,7 +63,7 @@ Now that you have completed creating the main Azure resources, the next step is 
     sudo docker push $ACR_NAME.azurecr.io/multi-worker
     sudo docker push $ACR_NAME.azurecr.io/multi-server:v2
     
-    # import the client image fromo my repo instead of pushing it
+    # import the client image fromomy repo instead of pushing it as there is currently an error with the build process
     az acr import \
       --name $ACR_NAME \
       --source docker.io/mosabami/multi-client \

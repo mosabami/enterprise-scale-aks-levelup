@@ -1,6 +1,6 @@
 # Deploy Postgres database using Terraform
 
-1. Copy [this file](https://github.com/mosabami/enterprise-scale-aks-levelup/blob/main/steps/deployment/portgress-resource-deployment/postgres.tf) into [this folder](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/07-AKS-cluster) in your cloned Enterprise-Scale-for-AKS repo (you may need to clone the enterprise-scale-aks-levelup repo into your local computer to do this)
+1. Copy [this file](https://github.com/mosabami/enterprise-scale-aks-levelup/blob/main/steps/deployment/portgress-resource-deployment/postgres.tf) into [this folder](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/07-AKS-cluster) in your cloned Enterprise-Scale-for-AKS repo you used to deploy the Azure resources (you may need to clone the enterprise-scale-aks-levelup repo into your local computer to do this)
 
 2. Make changes to the variables as required
 
@@ -13,5 +13,7 @@
    ```
    terraform apply
    ```
+
+If you get an error about changes to the configuration, go with the `-reconfigure` flag option.
 
 :arrow_forward:[Return to deployment steps](../README.md)

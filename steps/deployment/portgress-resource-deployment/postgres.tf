@@ -1,16 +1,3 @@
-data "terraform_remote_state" "existing-lz" {
-  backend = "azurerm"
-
-  config = {
-    storage_account_name = var.state_sa_name
-    container_name       = var.container_name
-    key                  = "lz-net"
-    access_key = var.access_key
-  }
-}
-
-data "azurerm_client_config" "current" {}
-
 resource "azurerm_resource_group" "postgressql_rg" {
   name     = "postgressql-rg"
   location = var.location #eastus make default
@@ -77,21 +64,9 @@ variable "sku_name" {
 }
 
 variable "ssl_enforcement_enabled" {
-    default = false
+    default = true
 }
 
 variable "storage_mb" {
     default = 51200
-}
-
-variable "access_key" {
-
-}
-
-variable "state_sa_name" {
-
-}
-
-variable "container_name" {
-
 }
