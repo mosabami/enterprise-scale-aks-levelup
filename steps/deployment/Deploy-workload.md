@@ -252,7 +252,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
    kubectl get ingress -w
    ```
 
-   with the IP address you should now be able to view the web page. Note that the web page wont work properly because the server isnt running yet. We will deploy the server next
+   With the IP address you should now be able to view the web page. Note that the web page wont work properly because the server isnt running yet. We will deploy the server next
 
 4. Create a new file for the secret provider class that will be used to pull the postgres database password from keyvault for the server
 
@@ -367,11 +367,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
 
    Now that the server has been deployed you can head back to the website and try entering some values between 1 and 39. You will have to refresh the page after you hit enter to see the calculated values. 
 
-   
-
-   
-
-   ### Add TLS
+### Add TLS
 
 Now that you have the workload working, the last step would be to add TLS to your deployment. We will be using a self-signed certificate in this deployment so we dont have to purchase certificates. Follow the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/Secure-Baseline/Terraform/08-workload.md#update-the-ingress-to-support-https-traffic) to create a the url and as well as add the certificate as to Key Vault
 
@@ -549,5 +545,7 @@ Now that you have the workload working, the last step would be to add TLS to you
    ```bash
    kubectl apply -f https-ingress.yaml
    ```
+
+### Conclusion and cleanup
 
 This marks the end of the tutorial. Feel free to browse to your new website using your URL by appending https:// to the begining. This will be flagged as unsafe since we used a self signed certificate, but you can click on advanced and proceed so you can view your web page. When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/09-cleanup.md) using your local machine.
