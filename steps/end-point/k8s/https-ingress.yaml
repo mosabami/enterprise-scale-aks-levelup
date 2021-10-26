@@ -60,3 +60,13 @@ spec:
                 name: server-service
                 port:
                   number: 5000
+          - path: /api
+            # UPDATE PATH
+            pathType: Prefix
+            # ADD PATHTYPE
+            backend:
+              service:
+                # UPDATE SERVICE FIELDS
+                name: server-service
+                port:
+                  number: 5000

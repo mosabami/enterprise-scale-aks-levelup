@@ -34,7 +34,7 @@ Now that you have completed creating the main Azure resources, the next step is 
    code index.js
    ```
 
-10. Add "/api" to the begining of the paths in line 39,43,49,55. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. Save it
+10. Add "/api" to the begining of the paths in line 39,43,49,55. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it
 
 11. Build the image for the server into the container registry you just created using the tag "v2"
 
@@ -61,8 +61,13 @@ Now that you have completed creating the main Azure resources, the next step is 
 
     ```bash
     sudo docker push $ACR_NAME.azurecr.io/multi-worker
-    sudo docker push $ACR_NAME.azurecr.io/multi-client
     sudo docker push $ACR_NAME.azurecr.io/multi-server:v2
+    
+    # import the client image fromo my repo instead of pushing it
+    az acr import \
+      --name $ACR_NAME \
+      --source docker.io/mosabami/multi-client \
+      --image multi-client
     ```
 
 15. Get the name of the Key vault you created and replace the placeholder below with it. Then create the postgres database password as a secret in keyvault

@@ -77,7 +77,7 @@ variable "sku_name" {
 }
 
 variable "ssl_enforcement_enabled" {
-    default = true
+    default = false
 }
 
 variable "storage_mb" {

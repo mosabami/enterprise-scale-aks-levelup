@@ -6,37 +6,37 @@ Now that our environment is all setup, we will begin the steps required to deplo
 
 1. If you havent yet, ensure your VM has all the environment variables your had in your local computer terminal. Log into your newly created AKS cluster
 
-   ```
+   ```bash
    az aks get-credentials -n $AKSCLUSTERNAME -g $AKSRESOURCEGROUP
    ```
 
 2. Complete the sign in process and check the nodes
 
-   ```
+   ```bash
    kubectl get nodes
    ```
 
 3. Switch to the folder that has the kubernetes manifest files
 
-   ```
+   ```bash
    cd ../k8s
    ```
 
 4. Expand the k8s folder within the deployment folder. There you will find the files the developer used to create the initial deployments. Open the worker-deployment.yaml file
 
-   ```
+   ```bash
    code  worker-deployment.yaml
    ```
 
 5. Replace the `mosabami` (developer's Docker hub username) with the name of your ACR for the image parameter. Your result should look similar to this: `acr87082.azurecr.io/multi-worker`. Your ACR needs to be used because your policy wont allow images be pulled from container registries outside ACR. Apply the worker deployment
 
-   ```
+   ```bash
    kubectl apply -f worker-deployment.yaml
    ```
 
 6. Worker does not need a service since all it does is run the calculations and pass the result back to redis. Open the client deployment file and replace the `mosabami` in the image parameter like you did in the previous step.
 
-   ```
+   ```bash
    code client-deployment.yaml
    ```
 
@@ -59,7 +59,7 @@ Now that our environment is all setup, we will begin the steps required to deplo
        spec:
          containers:
            - name: client
-             image: acr87082.azurecr.io/multi-client
+             image: <acr name>.azurecr.io/multi-client
              ports: 
                - containerPort: 3000
              readinessProbe: # is the container ready to receive traffic?
@@ -79,14 +79,14 @@ Now that our environment is all setup, we will begin the steps required to deplo
 
 8. Deploy the client pod and the client service
 
-   ```
+   ```bash
    kubectl apply -f client-deployment.yaml
    kubectl apply -f client-service.yaml
    ```
 
 9. Create a new file for the redis deployment persistent volume claim. This will allow the data stored in redis cache to persist even after the pod has been deleted or restarted.
 
-   ```
+   ```bash
    code redis-persistent-volume-claim.yaml
    ```
 
@@ -108,7 +108,7 @@ Now that our environment is all setup, we will begin the steps required to deplo
 
 11. Deploy the persistent volume claim
 
-    ```
+    ```bash
     kubectl apply -f redis-persistent-volume-claim.yaml 
     ```
 
@@ -150,7 +150,7 @@ Now that our environment is all setup, we will begin the steps required to deplo
 13. Deploy the redis pod
 
     ```
-    kubectl apply -f redis-deployment.yaml
+    kubectl apply -f redis-deployment.yamlbash
     ```
 
     If you check the AKS infrastructure resource group on Azure you will notice that a managed premium disk has now been dynamically provisioned for you by the persistent volume claim
@@ -173,7 +173,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
 
 1. Create a new http ingress file 
 
-   ```
+   ```bash
    code http-ingress.yaml
    ```
 
@@ -242,13 +242,13 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
 
 3. Deploy the ingress controller
 
-   ```
+   ```bash
    kubectl apply -f http-ingress.yaml
    ```
 
    Enter the command below and wait until the IP addresss of the ingress shows then cancel with ctrl+c
 
-   ```
+   ```bash
    kubectl get ingress -w
    ```
 
@@ -256,13 +256,13 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
 
 4. Create a new file for the secret provider class that will be used to pull the postgres database password from keyvault for the server
 
-   ```
+   ```bash
    code server-secret-provider-class.yaml
    ```
 
 5. Copy the code below and paste it into the file. Replace the placeholder userAssignedIdentityID with the client ID you saved earlier. Also replace the placeholder tenantId and the keyvault name
 
-   ```
+   ```yaml
    apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
    kind: SecretProviderClass
    metadata:
@@ -290,10 +290,264 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
      
    ```
 
+6. Deploy the server secret provider class
+
+   ```bash
+   kubectl apply -f server-secret-provider-class.yaml
+   ```
+
+7. Open the server deployment file and change the server deployment code so that it points to your ACR. You also need to ensure you are using version v2, your pg host points to the internal ip address of your postgres database and your PGUSER value is similar to this: `<pg user>@<pg database name>`. You will also need to add the secret store volume mount and point the volume to the secret provider class you just created. Save it afterwards.
+
+   ```bash
+   code server-deployment.yaml
+   ```
+
+8. Update the server deployment file so that it points to your repository. It should also have a volume mount that connects to the secrets store so that it can get the postgres database password from Key vault.It should also use the IP address of your postgress database nic. Your server deployment file should look similar to this
+
+   ```yaml
+   apiVersion: apps/v1
+   
+   kind: Deployment
+   metadata: 
+     name: server-deployment
+   spec:
+     selector:
+       matchLabels:
+         component: server
+     replicas: 1
+     template:
+       metadata:
+         labels:
+           component: server
+       spec:
+         containers:
+           - name: server
+             image: acr14961.azurecr.io/multi-server:v2
+             imagePullPolicy: Always
+             volumeMounts:
+             - name: secrets-store-inline
+               mountPath: "/mnt/secrets-store"
+               readOnly: true
+             ports:
+               - containerPort: 5000
+             env:
+               - name: REDIS_HOST
+                 value:  redis-service
+               - name: REDIS_PORT
+                 value: '6379'
+               - name: PGUSER
+                 value: postgres@postgresql-00000001
+               - name: PGHOST
+                 value: 10.1.16.7
+               - name: PGPORT
+                 value: '5432'
+               - name: PGDATABASE
+                 value: postgres
+               - name: PGPASSWORD
+                 valueFrom: 
+                   secretKeyRef: 
+                     name: pgpassword
+                     key: PGPASSWORD
+         volumes:
+           - name: secrets-store-inline
+             csi:
+               driver: secrets-store.csi.k8s.io
+               readOnly: true
+               volumeAttributes:
+                 secretProviderClass: "postgres-secret-csi"
+   ```
+
    
 
-6. 
+   Deploy the server pod
+
+   ```
+   kubectl apply -f server-deployment.yaml
+   ```
+
+   Now that the server has been deployed you can head back to the website and try entering some values between 1 and 39. You will have to refresh the page after you hit enter to see the calculated values. 
 
    
 
-:arrow_forward:[Return to deployment steps](../README.md)
+   
+
+   ### Add TLS
+
+Now that you have the workload working, the last step would be to add TLS to your deployment. We will be using a self-signed certificate in this deployment so we dont have to purchase certificates. Follow the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/Secure-Baseline/Terraform/08-workload.md#update-the-ingress-to-support-https-traffic) to create a the url and as well as add the certificate as to Key Vault
+
+1. Now that you have created the secret in Key vault and have a public url for your workload you will create the tls certificate secret provider. We delete the current ingress controller then create a new file called tls-cert-secret-provider-class.yaml
+
+   ```
+   kubectl delete -f http-ingress.yaml
+   code  tls-cert-secret-provider-class.yaml
+   ```
+
+2. Enter the code below into the file and save it after you enter the correct keyvault name, userAssignedIdentityID and tenantId
+
+   ```yaml
+   
+   apiVersion: secrets-store.csi.x-k8s.io/v1alpha1
+   kind: SecretProviderClass
+   metadata:
+     name: aks-tls-akv
+   spec:
+     provider: azure
+     parameters:
+       keyvaultName: <keyvaylt name>
+       useVMManagedIdentity: "true"         
+       userAssignedIdentityID: "<client id>" # the client ID of the MSI created by the 
+       objects:  |
+         array:
+           - |
+             objectName: aks-ingress-tls
+             objectAlias: aks-ingress-tls
+             objectType: secret 
+     # The objectType above is "secret" even though the aks-ingress-tls Certificate in the keyvault is certificate type.
+     # Also, the appropriate identity will need acces to GET "secrets" from the KV, as well as GET for "certificates"
+       tenantId: <tenant id>
+     secretObjects:
+       - secretName: aks-tls-akv  # k8s secret manifest will be generated and synced after mounting it from pod/deploy
+         type: kubernetes.io/tls
+         data:
+         - objectName: aks-ingress-tls # must match the name of certificate in kv
+           key: tls.crt
+         - objectName: aks-ingress-tls # must match the name of certificate in kv
+           key: tls.key
+   ```
+
+3. Now that you have created the secret provider class, redeploy the client but this time, you will include the volume mount for the secret provider class you just created. Your new client file should look similar to the code below.
+
+   ```yaml
+   
+   apiVersion: apps/v1
+   kind: Deployment
+   metadata:
+     name: client-deployment
+   spec:
+     replicas: 2
+     selector: 
+       matchLabels:
+         component: web
+     template:
+       metadata:
+         labels: 
+           component: web
+       spec:
+         containers:
+           - name: client
+             image: <acr name>.azurecr.io/multi-client
+             imagePullPolicy: Always
+             ports: 
+               - containerPort: 3000
+             readinessProbe: # is the container ready to receive traffic?
+               initialDelaySeconds: 10
+               httpGet:
+                 port: 3000
+                 path: /healthz
+             livenessProbe: # is the container healthy?
+               initialDelaySeconds: 2
+               periodSeconds: 5
+               httpGet:
+                 port: 3000
+                 path: /healthz
+             volumeMounts:
+             - name: aks-tls-akv
+               mountPath: /mnt/secrets-store
+               readOnly: true
+         volumes:
+           - name: aks-tls-akv
+             csi:
+               driver: secrets-store.csi.k8s.io
+               readOnly: true
+               volumeAttributes:
+                 secretProviderClass: "aks-tls-akv"
+   ```
+
+   
+
+4. We create a new ingress deployment file
+
+   ```bash
+   code https-ingress.yaml
+   ```
+
+5. Copy and paste the content of your https-ingress.yaml file into this new file and add the annotation in the code block below 
+
+   ```bash
+   appgw.ingress.kubernetes.io/ssl-redirect: "true"
+   ```
+
+6. Add the host url and secret name. The host URL is the URL you just created and used to create the tls certificate. Your new ingress controller file should look similar to the code below
+
+   ```yaml
+   apiVersion: networking.k8s.io/v1
+   # UPDATE API
+   kind: Ingress
+   metadata:
+     name: ingress-service
+     annotations:
+       kubernetes.io/ingress.class: 'azure/application-gateway'
+       appgw.ingress.kubernetes.io/ssl-redirect: "true"
+       # appgw.ingress.kubernetes.io/backend-path-prefix: "/"
+       # nginx.ingress.kubernetes.io/use-regex: 'true'
+       # ADD ANNOTATION
+       # nginx.ingress.kubernetes.io/rewrite-target: /$1
+       # UPDATE ANNOTATION
+   spec:
+     tls:
+       - hosts:
+         - <DNS name label>.eastus.cloudapp.azure.com
+         secretName: aks-tls-akv
+     rules:
+       - host: <DNS name label>.eastus.cloudapp.azure.com
+         http:
+           paths:
+             - path: /
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: client-service
+                   port:
+                     number: 3000
+             - path: /api/values/all
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: server-service
+                   port:
+                     number: 5000
+             - path: /api/values
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: server-service
+                   port:
+                     number: 5000
+             - path: /api/values/current
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: server-service
+                   port:
+                     number: 5000
+   ```
+
+7. Apply the new ingress controller
+
+   ```bash
+   kubectl apply -f https-ingress.yaml
+   ```
+
+This marks the end of the tutorial. Feel free to browse to your new website using your URL by appending https:// to the begining. This will be flagged as unsafe since we used a self signed certificate, but you can click on advanced and proceed so you can view your web page. When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/09-cleanup.md) using your local machine.

@@ -25,7 +25,7 @@ spec:
             - containerPort: 5000
           env:
             - name: REDIS_HOST
-              value:  redis-cluster-ip-service
+              value:  redis-service
             - name: REDIS_PORT
               value: '6379'
             - name: PGUSER
