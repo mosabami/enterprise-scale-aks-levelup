@@ -60,6 +60,7 @@ Now that our environment is all setup, we will begin the steps required to deplo
          containers:
            - name: client
              image: <acr name>.azurecr.io/multi-client
+             imagePullPolicy: Always
              ports: 
                - containerPort: 3000
              readinessProbe: # is the container ready to receive traffic?
@@ -112,7 +113,13 @@ Now that our environment is all setup, we will begin the steps required to deplo
     kubectl apply -f redis-persistent-volume-claim.yaml 
     ```
 
-12. Open the redis deployment file and update it so that it now uses your image and the persistent volume claim you just created. The result should look like the code below. Save it.
+12. Open the redis deployment file 
+
+    ```
+    code redis-deployment.yaml
+    ```
+    
+13. update it so that it now uses your image and the persistent volume claim you just created. The result should look like the code below. Save it.
 
     ```yaml
     apiVersion: apps/v1
@@ -136,6 +143,7 @@ Now that our environment is all setup, we will begin the steps required to deplo
           containers:
             - name: redis
               image: acr87082.azurecr.io/redis
+              imagePullPolicy: Always
               resources:
                 limits:
                   memory: "128Mi"
@@ -147,10 +155,10 @@ Now that our environment is all setup, we will begin the steps required to deplo
                   mountPath:  "/data"
     ```
 
-13. Deploy the redis pod
+14. Deploy the redis pod
 
-    ```
-    kubectl apply -f redis-deployment.yamlbash
+    ```bash
+    kubectl apply -f redis-deployment.yaml
     ```
 
     If you check the AKS infrastructure resource group on Azure you will notice that a managed premium disk has now been dynamically provisioned for you by the persistent volume claim
@@ -159,17 +167,17 @@ Now that our environment is all setup, we will begin the steps required to deplo
 
     
 
-14. Deploy the redis service
+15. Deploy the redis service
 
     ```
     kubectl apply -f redis-service.yaml
     ```
 
-### Deploy http ingress and server 
+### Deploy http Ingress and Backend Server 
 
-We will begin by deploying the ingress without TLS. To do this we need to temporarily allow access to application gateway via port 80. This option is disabled during our infrastructure deployment because that is more secure. For now, we want to test the application without having to deploy TLS so we will open it up at the NSG. You can find instructions on how to do that [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#allow-access-to-the-application-gateway-via-port-80-will-be-updated-to-https-soon)
+We will begin by deploying the ingress without TLS. To do this we need to temporarily allow access to application gateway via port 80. This option is disabled during our infrastructure deployment because doing so is more secure. For now, we want to test the application without having to deploy TLS so we will open it up at the NSG. You can find instructions on how to do that [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#allow-access-to-the-application-gateway-via-port-80-will-be-updated-to-https-soon)
 
-Now that the NSG has been opened up, we begin by deploying the ingress. We are using AGIC. The developer used nginx. We need to update the ingress service to use AGIC. AGIC does not allow the use or regex and does not allow us to rewrite target. The original server deployment used NGINX which has these features. So when it receives requests with "/api" in the url, it removes the "/api" (rewrite target) form the url and sends the request to the server. Since AGIC doesnt have that feature, we had to change the server code to now expect "/api" in the url to make up for the limitations of AGIC. We decided to use AGIC in this deployment because it has lots of useful features for AKS deployments like the fact that we dont need an additional loadbalancer in front of the ingress controller. NGINX would have deployed one. 
+Now that the NSG has been opened up, we begin by deploying the ingress. We are using AGIC. The developer used nginx. We need to update the ingress service to use AGIC. AGIC does not allow the use or regex and does not allow us to rewrite target. The original server deployment used NGINX which has these features. So when it receives requests with "/api" in the url, it removes the "/api" (rewrite target) form the url and sends the request to the server. Since AGIC doesnt have that feature, we had to change the server code to now expect "/api" in the url to make up for the limitations of AGIC. We decided to use AGIC in this deployment because it has lots of useful features for AKS deployments like the fact that we don't need an additional loadbalancer in front of the ingress controller. NGINX would have deployed one. 
 
 1. Create a new http ingress file 
 
@@ -177,7 +185,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
    code http-ingress.yaml
    ```
 
-2. Copy the code below into the new file and save it. Take a minute to compare this new file with the previous nginx ingress file ingress-service.yaml. One of the big differences is that you'll notice that in the nginx ingress, we didnt have to list out every path. We used regex to take care of that as well as rewrite target to remove the /api so that this ingress can work with the original server deployment. Since AGIC doesnt have the regex feature, we have to spell out each individual path.
+2. Copy the code below into the new file and save it. Take a minute to compare this new file with the previous NGINX ingress file ingress-service.yaml. One of the big differences is that you'll notice that in the NGINX ingress, we didn't have to list out every path. We used regex to take care of that as well as rewrite target to remove the /api so that this ingress can work with the original server deployment. Since AGIC doesn't have the regex feature, we have to spell out each individual path.
 
    ```yaml
    apiVersion: networking.k8s.io/v1
@@ -296,13 +304,13 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
    kubectl apply -f server-secret-provider-class.yaml
    ```
 
-7. Open the server deployment file and change the server deployment code so that it points to your ACR. You also need to ensure you are using version v2, your pg host points to the internal ip address of your postgres database and your PGUSER value is similar to this: `<pg user>@<pg database name>`. You will also need to add the secret store volume mount and point the volume to the secret provider class you just created. Save it afterwards.
+7. We don't need Postgres service or deployment anymore because we will be using the managed Postgres database we already deployed. Open the server deployment file and change the server deployment code so that it points to your ACR. You also need to ensure you are using version v2, your PG host points to the internal IP address of your Postgres database and your PGUSER value is similar to this: `<pg user>@<pg database name>`. You will also need to add the secret store volume mount and point the volume to the secret provider class you just created. Save it afterwards.
 
    ```bash
    code server-deployment.yaml
    ```
 
-8. Update the server deployment file so that it points to your repository. It should also have a volume mount that connects to the secrets store so that it can get the postgres database password from Key vault.It should also use the IP address of your postgress database nic. Your server deployment file should look similar to this
+8. Update the server deployment file so that it points to your repository. It should also have a volume mount that connects to the secrets store so that it can get the Postgres database password from Key vault. It should also use the IP address of your Postgres database NIC. Your server deployment file should look similar to this
 
    ```yaml
    apiVersion: apps/v1
@@ -322,7 +330,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
        spec:
          containers:
            - name: server
-             image: acr14961.azurecr.io/multi-server:v2
+             image: <acr name>.azurecr.io/multi-server:v2
              imagePullPolicy: Always
              volumeMounts:
              - name: secrets-store-inline
@@ -338,7 +346,7 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
                - name: PGUSER
                  value: postgres@postgresql-00000001
                - name: PGHOST
-                 value: 10.1.16.7
+                 value: <internal ip of Postgres>
                - name: PGPORT
                  value: '5432'
                - name: PGDATABASE
@@ -359,13 +367,14 @@ Now that the NSG has been opened up, we begin by deploying the ingress. We are u
 
    
 
-   Deploy the server pod
+   Deploy the server pod and service
 
    ```
    kubectl apply -f server-deployment.yaml
+   kubectl apply -f server-service.yaml
    ```
-
-   Now that the server has been deployed you can head back to the website and try entering some values between 1 and 39. You will have to refresh the page after you hit enter to see the calculated values. 
+   
+   Now that the server has been deployed you can head back to the website and try entering some values between 1 and 40. You will have to refresh the page after you hit enter to see the calculated values. 
 
 ### Add TLS
 
@@ -458,16 +467,16 @@ Now that you have the workload working, the last step would be to add TLS to you
                volumeAttributes:
                  secretProviderClass: "aks-tls-akv"
    ```
-
    
-
+   
+   
 4. We create a new ingress deployment file
 
    ```bash
    code https-ingress.yaml
    ```
 
-5. Copy and paste the content of your https-ingress.yaml file into this new file and add the annotation in the code block below 
+5. Copy and paste the content of your http-ingress.yaml file into this new file and add the annotation in the code block below 
 
    ```bash
    appgw.ingress.kubernetes.io/ssl-redirect: "true"
@@ -548,4 +557,6 @@ Now that you have the workload working, the last step would be to add TLS to you
 
 ### Conclusion and cleanup
 
-This marks the end of the tutorial. Feel free to browse to your new website using your URL by appending https:// to the begining. This will be flagged as unsafe since we used a self signed certificate, but you can click on advanced and proceed so you can view your web page. When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/09-cleanup.md) using your local machine.
+This marks the end of the tutorial. Feel free to browse to your new website using your URL by appending https:// to the begining. This will be flagged as unsafe (Your connection isnt private warning) since we used a self signed certificate, but you can click on advanced and proceed so you can view your web page. For completeness you can go ahead and delete the port_80 inbound rule you created earlier for your appgw subnet NSG.
+
+When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/09-cleanup.md) using your local machine.

@@ -10,9 +10,7 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 
 ## Next steps
 
-:arrow_forward: [Build Enterprise scale landing zone using Private cluster Terraform Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform) without deploying the workload (application)
-
-:arrow_forward:[Enable azure policy for your AKS cluster](https://docs.microsoft.com/en-us/azure/governance/policy/concepts/policy-for-kubernetes#:~:text=%20Install%20Azure%20Policy%20Add-on%20for%20AKS%20Engine,if%20you%27re%20not%20using%20Cloud%20Shell...%20More%20)
+:arrow_forward: [Build Enterprise scale for AKS cluster using Private cluster Terraform Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform) without deploying the workload (application)
 
 :arrow_forward:[Add the "Kubernetes cluster containers should only use allowed images" policy at RG level](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions)
 

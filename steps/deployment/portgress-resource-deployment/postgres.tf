@@ -15,6 +15,7 @@ resource "azurerm_postgresql_server" "postgresql_server" {
   geo_redundant_backup_enabled = var.geo_redundant_backup_enabled
   sku_name                     = var.sku_name
   ssl_enforcement_enabled      = var.ssl_enforcement_enabled
+  public_network_access_enabled= false
   storage_mb                   = var.storage_mb
   version                      = 11
 }
@@ -64,7 +65,7 @@ variable "sku_name" {
 }
 
 variable "ssl_enforcement_enabled" {
-    default = true
+    default = false
 }
 
 variable "storage_mb" {

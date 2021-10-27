@@ -1,6 +1,6 @@
 ## Deploy Postgres and create images
 
-Now that you have completed creating the main Azure resources, the next step is to create postgres database and setup the virtual machine you will use to deploy the workload. The virtual machine deployed during the setup hub step will be used because we are deploying onto a private cluster using keyvault and ACR that can only be accessed from within the same or peered virtual network.
+Now that you have completed creating the main Azure resources, the next step is to create postgres database and setup the virtual machine you will use to deploy the workload. 
 
 1. Deploy postgress database into your landing zone using the instructions [here](./portgress-resource-deployment/README.md). Make the password "12345ASDf" and username postgres
 
@@ -63,7 +63,7 @@ Now that you have completed creating the main Azure resources, the next step is 
     sudo docker push $ACR_NAME.azurecr.io/multi-worker
     sudo docker push $ACR_NAME.azurecr.io/multi-server:v2
     
-    # import the client image fromomy repo instead of pushing it as there is currently an error with the build process
+    # import the client image from my repo instead of pushing your build as there is currently an error in the build process
     az acr import \
       --name $ACR_NAME \
       --source docker.io/mosabami/multi-client \
