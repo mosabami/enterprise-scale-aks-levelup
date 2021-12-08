@@ -9,10 +9,6 @@ param ssl_enforcement_enabled string
 param storage_mb int
 param publicNetworkAccess string
 param name string
-param privateEndpointPostgressName string
-param vnetName string
-param subnetName string
-
 
 resource postgresql_server 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
   location: location
@@ -35,27 +31,4 @@ resource postgresql_server 'Microsoft.DBforPostgreSQL/servers@2017-12-01' = {
   }
 }
 
-resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' existing = {
-  name: '${vnetName}/${subnetName}'
-}
-
-resource privateEndpointPostgres 'Microsoft.Network/privateEndpoints@2020-11-01' = {
-  name: privateEndpointPostgressName
-  location: resourceGroup().location
-  properties: {
-    subnet: {
-      id: subnet.id
-    }
-    privateLinkServiceConnections: [
-      {
-        name: '${privateEndpointPostgressName}-conn'
-        properties: {
-          groupIds: [
-            'postgresqlServer'
-          ]
-          privateLinkServiceId: postgresql_server.id
-        }
-      }
-    ]
-  }
-}
+output postgressid string = postgresql_server.id

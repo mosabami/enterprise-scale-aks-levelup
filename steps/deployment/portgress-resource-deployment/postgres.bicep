@@ -14,6 +14,8 @@ param name string = 'postgresql-00000001'
 param privateEndpointPostgressName string = 'postgres-pe'
 param vnetName string
 param subnetName string
+param vnetHUBRGName string = 'ESLZ-HUB'
+param vnetHubName string = 'VNet-HUB'
 
 
 module rg 'modules/resource_group.bicep' = {
@@ -21,6 +23,28 @@ module rg 'modules/resource_group.bicep' = {
   params: {
     rgName: rgName
     location: deployment().location
+  }
+}
+
+module privatednspostgres 'modules/privatednszone.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: 'privatednspostgres'
+  params: {
+    privateDNSZoneName: 'privatelink.postgres.database.azure.com'
+  }
+}
+
+resource vnethub 'Microsoft.Network/virtualNetworks@2021-02-01' existing = {
+  scope: resourceGroup(vnetHUBRGName)
+  name: vnetHubName
+}
+
+module privateDNSLinkpostgres 'modules/privatednslink.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: 'privateDNSLinkACR'
+  params: {
+    privateDnsZoneName: privatednspostgres.outputs.privateDNSZoneName
+    vnetId: vnethub.id
   }
 }
 
@@ -35,12 +59,37 @@ module postgressql_server 'modules/postgresServer.bicep' = {
     geo_redundant_backup_enabled: geo_redundant_backup_enabled
     location: location
     name: name
-    privateEndpointPostgressName: privateEndpointPostgressName
     publicNetworkAccess: publicNetworkAccess
     sku_name: sku_name
     ssl_enforcement_enabled: ssl_enforcement_enabled
     storage_mb: storage_mb
-    subnetName: subnetName
-    vnetName: vnetName
+  }
+}
+
+resource subnet 'Microsoft.Network/virtualNetworks/subnets@2021-03-01' existing = {
+  scope: resourceGroup(rg.name)
+  name: '${vnetName}/${subnetName}'
+}
+
+module privateEndpointpostgress 'modules/privateendpoint.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: privateEndpointPostgressName
+  params: {
+    groupIds: [
+      'postgresqlServer'
+    ]
+    privateEndpointName: privateEndpointPostgressName
+    privatelinkConnName: '${privateEndpointPostgressName}-conn'
+    resourceId: postgressql_server.outputs.postgressid
+    subnetid: subnet.id
+  }
+}
+
+module privateEndpointpostgressDNSSetting 'modules/privatedns.bicep' = {
+  scope: resourceGroup(rg.name)
+  name: 'postgress-pvtep-dns'
+  params: {
+    privateDNSZoneId: privatednspostgres.outputs.privateDNSZoneId
+    privateEndpointName: privateEndpointpostgress.name
   }
 }
