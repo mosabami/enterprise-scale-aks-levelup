@@ -14,10 +14,13 @@ spec:
     spec:
       containers:
       - name: client
-        image: mosabami/multi-client:latest
+        image: mosabami/smartbrainclient:v4
+        imagePullPolicy: Always
         resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 3000
+        env:
+          - name: SERVER_URL
+            value: server-service
+          - name: WORKER_URL
+            value: worker-service

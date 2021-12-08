@@ -1,42 +1,26 @@
 apiVersion: apps/v1
-
 kind: Deployment
 metadata:
   name: client-deployment
 spec:
-  replicas: 2
-  selector: 
+  replicas: 1
+  selector:
     matchLabels:
       component: web
   template:
     metadata:
-      labels: 
+      labels:
         component: web
     spec:
       containers:
-        - name: client
-          image: acr87082.azurecr.io/multi-client
-          ports: 
-            - containerPort: 3000
-          readinessProbe: # is the container ready to receive traffic?
-            initialDelaySeconds: 10
-            httpGet:
-              port: 3000
-              path: /healthz
-          livenessProbe: # is the container healthy?
-            initialDelaySeconds: 2
-            periodSeconds: 5
-            httpGet:
-              port: 3000
-              path: /healthz
-          volumeMounts:
-          - name: aks-tls-akv
-            mountPath: /mnt/secrets-store
-            readOnly: true
-      volumes:
-        - name: aks-tls-akv
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: "aks-tls-akv"
+      - name: client
+        image: mosabami/smartbrainclient:v4
+        imagePullPolicy: Always
+        resources:
+        ports:
+        - containerPort: 3000
+        env:
+          - name: SERVER_URL
+            value: server-service
+          - name: WORKER_URL
+            value: worker-service

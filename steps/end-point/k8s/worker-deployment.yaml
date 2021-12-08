@@ -1,9 +1,7 @@
 apiVersion: apps/v1
-
 kind: Deployment
 metadata:
   name: worker-deployment
-
 spec:
   replicas: 1
   selector:
@@ -15,11 +13,14 @@ spec:
         component: worker
     spec:
       containers:
-        - name: worker
-          image: acr87082.azurecr.io/multi-server:v2
-          env:
-            - name: REDIS_HOST
-              value: redis-cluster-ip-service
-            - name: REDIS_PORT
-              value: '6379'
+      - name: worker
+        image: mosabami/smartbrainworker:v2
+        imagePullPolicy: Always
+        resources:
+        ports:
+        - containerPort: 2000
+        env:
+          - name: REDIS_HOST
+            value: redis-service
+
 

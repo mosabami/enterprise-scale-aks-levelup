@@ -14,11 +14,9 @@ spec:
     spec:
       containers:
       - name: server
-        image: mosabami/multi-server
+        image: mosabami/smartbrainapi:v2
+        imagePullPolicy: Always
         resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
         ports:
         - containerPort: 5000
         env:
@@ -27,16 +25,16 @@ spec:
           - name:  REDIS_PORT
             value: '6379'
           - name: PGUSER
-            value: postgres
+            value: guest
           - name: PGHOST
             value: postgres-service
           - name: PGPORT
             value: '5432'
           - name: PGDATABASE
-            value: postgres
+            value: smartbrain
           - name: PGPASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pgpassword
-                key: PGPASSWORD
+            value: guest
+          - name: WORKER_URL
+            value: worker-service
+
 
