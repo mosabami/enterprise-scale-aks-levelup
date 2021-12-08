@@ -13,6 +13,15 @@
    ```
    terraform apply
    ```
+# Deploy Postgres database using Bicep
+
+1. Make changes in the parameters file accordingly.
+
+2. Deploy bicep using the modified parameters file
+
+   ```bash
+   az deployment sub create -n "ESLZ-SPOKE" -l "CentralUS" -f postgres.bicep -p parameters-postgres.json
+   ```
 
 If you get an error about changes to the configuration, go with the `-reconfigure` flag option.
 

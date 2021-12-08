@@ -24,7 +24,7 @@ module rg 'modules/resource_group.bicep' = {
   }
 }
 
-module postgressql_server 'modules/protgresServer.bicep' = {
+module postgressql_server 'modules/postgresServer.bicep' = {
   scope: resourceGroup(rg.name)
   name: name
   params: {
