@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: server-deployment
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       component: server
@@ -14,9 +14,12 @@ spec:
     spec:
       containers:
       - name: server
-        image: mosabami/smartbrainapi:v2
+        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainapi:v8
         imagePullPolicy: Always
-        resources:
+        volumeMounts:
+          - name: secrets-store-inline
+            mountPath: '/mnt/secrets-store'
+            readOnly: true
         ports:
         - containerPort: 5000
         env:
@@ -25,16 +28,34 @@ spec:
           - name:  REDIS_PORT
             value: '6379'
           - name: PGUSER
-            value: guest
+            value: pguser@awesomepgggserver
           - name: PGHOST
-            value: postgres-service
+            value: awesomepgggserver.postgres.database.azure.com
           - name: PGPORT
             value: '5432'
           - name: PGDATABASE
-            value: smartbrain
+            value: postgres
+          - name: SSLFLAG
+            value: 'true'
           - name: PGPASSWORD
-            value: guest
+            valueFrom: 
+              secretKeyRef: 
+                name: pgpassword
+                key: PGPASSWORD
           - name: WORKER_URL
             value: worker-service
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          periodSeconds: 3
+          timeoutSeconds: 1
+      volumes:
+        - name: secrets-store-inline
+          csi:
+            driver: secrets-store.csi.k8s.io
+            readOnly: true
+            volumeAttributes:
+              secretProviderClass: "postgres-secret-csi"
 
 

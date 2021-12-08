@@ -21,8 +21,8 @@ app = Flask(__name__)
 try:
     origin = os.environ['CLIENT_URL']
 except(KeyError):
-    origin = "http://localhost:*"
-    # origin='*'
+    # origin = "http://localhost:*"
+    origin='*'
 print(origin)
 CORS(app, support_credentials=True,origins=[origin])
 
@@ -61,6 +61,14 @@ def run_ml_model(url,img_data,redisInstance,filename = 'image_name.jpg'):
     return results
 
 # @cross_origin(supports_credentials=True)
+@app.route('/', methods=['GET', 'POST'])
+def get_rhome():
+    return 'okay python2'
+
+@app.route('/worker', methods=['GET', 'POST'])
+def get_home():
+    return 'okay python'
+
 @app.route('/worker/ml', methods=['GET', 'POST'])
 def get_detected():
     url = request.args.get('url')

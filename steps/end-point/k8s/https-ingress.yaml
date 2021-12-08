@@ -5,14 +5,20 @@ metadata:
   name: ingress-service
   annotations:
     kubernetes.io/ingress.class: 'azure/application-gateway'
+    appgw.ingress.kubernetes.io/ssl-redirect: "true"
     # appgw.ingress.kubernetes.io/backend-path-prefix: "/"
     # nginx.ingress.kubernetes.io/use-regex: 'true'
     # ADD ANNOTATION
     # nginx.ingress.kubernetes.io/rewrite-target: /$1
     # UPDATE ANNOTATION
 spec:
+  tls:
+    - hosts:
+      - smartbrain.centralus.cloudapp.azure.com
+      secretName: aks-tls-akv
   rules:
-    - http:
+    - host: smartbrain.centralus.cloudapp.azure.com
+      http:
         paths:
           - path: /api/*
             # UPDATE PATH
