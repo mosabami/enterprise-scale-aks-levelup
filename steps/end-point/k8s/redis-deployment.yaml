@@ -12,12 +12,20 @@ spec:
       labels:
         component: redis
     spec:
+      volumes:
+        - name: redis-storage
+          persistentVolumeClaim:
+            claimName: redis-persistent-volume-claim
       containers:
-      - name: redis
-        image: redis
-        resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
-        ports:
-        - containerPort: 6379
+        - name: redis
+          image: eslzacr7z6cmpr2wmwso.azurecr.io/redis
+          imagePullPolicy: Always
+          resources:
+            limits:
+              memory: '128Mi'
+              cpu: '500m'
+          ports:
+            - containerPort: 6379
+          volumeMounts:
+            - name: redis-storage
+              mountPath: '/data'
