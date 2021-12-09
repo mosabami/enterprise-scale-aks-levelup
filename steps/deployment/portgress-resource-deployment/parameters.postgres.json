@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "rgName": {
-        "value": "postgressql-rg"
+        "value": "ESLZ-SPOKE"
       },
       "administrator_login": {
         "value": "postgres"
@@ -43,6 +43,12 @@
       },
       "subnetName": {
         "value": "servicespe"
-      }   
+      },
+      "vnetHUBRGName": {
+        "value": "ESLZ-HUB"
+      },
+      "vnetHubName": {
+        "value": "VNet-HUB"
+      }         
     }
   }

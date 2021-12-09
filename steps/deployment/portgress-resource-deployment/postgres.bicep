@@ -1,6 +1,6 @@
 targetScope = 'subscription'
 param location string = deployment().location
-param rgName string = 'postgressql-rg'
+param rgName string = 'ESLZ-SPOKE'
 param administrator_login string = 'postgres'
 param administrator_login_password string = '12345ASDf'
 param auto_grow_enabled string = 'Enabled'
@@ -18,12 +18,16 @@ param vnetHUBRGName string = 'ESLZ-HUB'
 param vnetHubName string = 'VNet-HUB'
 
 
-module rg 'modules/resource_group.bicep' = {
+// module rg 'modules/resource_group.bicep' = {
+//   name: rgName
+//   params: {
+//     rgName: rgName
+//     location: deployment().location
+//   }
+// }
+
+resource rg 'Microsoft.Resources/resourceGroups@2021-04-01' existing = {
   name: rgName
-  params: {
-    rgName: rgName
-    location: deployment().location
-  }
 }
 
 module privatednspostgres 'modules/privatednszone.bicep' = {
