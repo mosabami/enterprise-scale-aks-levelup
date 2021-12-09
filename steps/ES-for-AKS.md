@@ -12,7 +12,7 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 
 :arrow_forward: [Build Enterprise scale for AKS cluster using Private cluster Bicep Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep) without deploying the workload (application)
 
-:large_blue_diamond: Link for a command line deployment reference: [Deployment CLI](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep/deployment.azcli)
+    :large_blue_diamond: Link for a command line deployment reference: [Deployment CLI](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep/deployment.azcli)
 
 :arrow_forward:[Add the "Kubernetes cluster containers should only use allowed images" policy at RG level](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions)
 
