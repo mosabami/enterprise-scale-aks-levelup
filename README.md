@@ -39,7 +39,7 @@ Repository for the Enterprise Scale for AKS LevelUp training.
 
    ​ OR
 
-   - Review the AKS Workshop here: [Azure Kubernetes Service Workshop - Learn | Microsoft Docs](https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Flearn%2Fmodules%2Faks-workshop%2F&data=04|01|aayodeji%40microsoft.com|0bad1490cfd34ce49c7008d99835f73d|72f988bf86f141af91ab2d7cd011db47|1|0|637708179858412982|Unknown|TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D|1000&sdata=T3MCuQTlZc61Rjnu3tjNHAauupQNqKidTUN1FGMY30Y%3D&reserved=0)
+   - Review the AKS Workshop here: [Azure Kubernetes Service Workshop - Learn | Microsoft Docs](https://docs.microsoft.com/en-us/learn/modules/aks-workshop)
 
    2. Basic knowledge of IaC would also be helpful (Terraform, ARM or Bicep)
 
@@ -47,7 +47,7 @@ Repository for the Enterprise Scale for AKS LevelUp training.
 
    4. Docker desktop or similar installed
 
-   5. Optional: [WSL](https://nam06.safelinks.protection.outlook.com/?url=https%3A%2F%2Fdocs.microsoft.com%2Fen-us%2Fwindows%2Fwsl%2Finstall&data=04|01|aayodeji%40microsoft.com|0bad1490cfd34ce49c7008d99835f73d|72f988bf86f141af91ab2d7cd011db47|1|0|637708179858412982|Unknown|TWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D|1000&sdata=LWg80msToW6PoIDZi62iP9tPsaCPsxYlFCvPacHMjR4%3D&reserved=0)
+   5. Optional: [WSL](https://docs.microsoft.com/en-us/windows/wsl/install)
 
    We will be using a Linux terminal for this workshop
 
