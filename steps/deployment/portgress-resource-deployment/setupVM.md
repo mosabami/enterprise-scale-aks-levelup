@@ -9,7 +9,8 @@ curl -sL https://aka.ms/InstallAzureCLIDeb | sudo bash
 2. Docker
 
 ```bash
-sudo apt install docker.io -y
+sudo curl -sL get.docker.com | bash
+sudo usermod -a -G docker <username>
 ```
 
 3. [Kubernetes CLI](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/)
