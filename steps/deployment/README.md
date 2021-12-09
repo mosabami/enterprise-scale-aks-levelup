@@ -32,6 +32,12 @@ In a production environment you would have to access the jumpbox using a bastion
     ```bash
     az network firewall network-rule create -f AZFW -g ESLZ-HUB -c AKS-Egress --protocols Any --destination-addresses '*' --destination-ports '*' --source-addresses 10.0.3.0/24 -n Allow-Jumpbox-Internet-Access
     ```
+
+    - Allow application to download pictures on internet
+    
+    ```bash
+    az network firewall network-rule create -f AZFW -g ESLZ-HUB -c AKS-Egress --protocols Any --destination-addresses '*' --destination-ports '*' --source-addresses 10.1.1.0/24 -n Allow-AKS-App-Picture-Download
+    ```
     
 4. Install the required tools in your new virtual machine using the instructions [here](./portgress-resource-deployment/setupVM.md)
 
@@ -42,10 +48,10 @@ In a production environment you would have to access the jumpbox using a bastion
    cd enterprise-scale-aks-levelup
    ```
 
-6. Copy the content of the steps/starting-point folder in your cloned repo in the vm into the steps/deployment folder.
+6. Copy the content of the steps/end-point folder in your cloned repo in the vm into the steps/deployment folder.
 
     ```bash
-    cp -R steps/starting-point/* steps/deployment/
+    cp -R steps/end-point/* steps/deployment/
     ```
 
 7. Get your ACR name and replace the placeholder below with your ACR name

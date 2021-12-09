@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: worker
-        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainworker:v7
+        image: <ACR Name>.azurecr.io/smartbrainworker:v2
         imagePullPolicy: Always
         ports:
         - containerPort: 2000

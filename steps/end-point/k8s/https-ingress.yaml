@@ -14,10 +14,10 @@ metadata:
 spec:
   tls:
     - hosts:
-      - smartbrain.centralus.cloudapp.azure.com
+      - <AppGW Public IP Host Name>.<region>.cloudapp.azure.com
       secretName: aks-tls-akv
   rules:
-    - host: smartbrain.centralus.cloudapp.azure.com
+    - host: <AppGW Public IP Host Name>.<region>.cloudapp.azure.com
       http:
         paths:
           - path: /api/*

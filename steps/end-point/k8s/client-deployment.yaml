@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainclient
+        image: <ACR Name>.azurecr.io/smartbrainclient
         imagePullPolicy: Always
         ports:
           - containerPort: 3000
