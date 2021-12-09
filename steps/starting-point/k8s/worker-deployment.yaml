@@ -14,13 +14,13 @@ spec:
     spec:
       containers:
       - name: worker
-        image: mosabami/multi-worker
+        image: mosabami/smartbrainworker:v3
+        imagePullPolicy: Always
         resources:
-          limits:
-            memory: "128Mi"
-            cpu: "500m"
+        ports:
+        - containerPort: 2000
         env:
           - name: REDIS_HOST
             value: redis-service
-          - name: REDIS_PORT
-            value: '6379'
+
+

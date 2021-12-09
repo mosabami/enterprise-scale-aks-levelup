@@ -4,7 +4,7 @@ metadata:
   name: redis-persistent-volume-claim
 spec:
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   storageClassName: managed-premium
   resources:
     requests:

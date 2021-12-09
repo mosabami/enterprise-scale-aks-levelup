@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      component: web
+  template:
+    metadata:
+      labels:
+        component: web
+    spec:
+      containers:
+      - name: client
+        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainclient
+        imagePullPolicy: Always
+        ports:
+          - containerPort: 3000
+        env:
+          - name: SERVER_URL
+            value: server-service
+          - name: WORKER_URL
+            value: worker-service

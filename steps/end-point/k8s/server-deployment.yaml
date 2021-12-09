@@ -1,46 +1,55 @@
 apiVersion: apps/v1
-
 kind: Deployment
-metadata: 
+metadata:
   name: server-deployment
 spec:
+  replicas: 2
   selector:
     matchLabels:
       component: server
-  replicas: 1
   template:
     metadata:
       labels:
         component: server
     spec:
       containers:
-        - name: server
-          image: acr87082.azurecr.io/multi-server:v2
-          imagePullPolicy: Always
-          volumeMounts:
+      - name: server
+        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainapi:v8
+        imagePullPolicy: Always
+        volumeMounts:
           - name: secrets-store-inline
-            mountPath: "/mnt/secrets-store"
+            mountPath: '/mnt/secrets-store'
             readOnly: true
-          ports:
-            - containerPort: 5000
-          env:
-            - name: REDIS_HOST
-              value:  redis-service
-            - name: REDIS_PORT
-              value: '6379'
-            - name: PGUSER
-              value: postgres@postgresql-00000001
-            - name: PGHOST
-              value: 10.1.16.101
-            - name: PGPORT
-              value: '5432'
-            - name: PGDATABASE
-              value: postgres
-            - name: PGPASSWORD
-              valueFrom: 
-                secretKeyRef: 
-                  name: pgpassword
-                  key: PGPASSWORD
+        ports:
+        - containerPort: 5000
+        env:
+          - name: REDIS_HOST
+            value: redis-service
+          - name:  REDIS_PORT
+            value: '6379'
+          - name: PGUSER
+            value: pguser@awesomepgggserver
+          - name: PGHOST
+            value: awesomepgggserver.postgres.database.azure.com
+          - name: PGPORT
+            value: '5432'
+          - name: PGDATABASE
+            value: postgres
+          - name: SSLFLAG
+            value: 'true'
+          - name: PGPASSWORD
+            valueFrom: 
+              secretKeyRef: 
+                name: pgpassword
+                key: PGPASSWORD
+          - name: WORKER_URL
+            value: worker-service
+        readinessProbe:
+          httpGet:
+            path: /
+            port: 5000
+          periodSeconds: 3
+          timeoutSeconds: 1
       volumes:
         - name: secrets-store-inline
           csi:
@@ -48,7 +57,5 @@ spec:
             readOnly: true
             volumeAttributes:
               secretProviderClass: "postgres-secret-csi"
-
-
 
 

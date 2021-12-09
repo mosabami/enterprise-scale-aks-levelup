@@ -10,11 +10,8 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 
 ## Next steps
 
-:arrow_forward: [Build Enterprise scale for AKS cluster using Private cluster Terraform Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform) without deploying the workload (application)
+:arrow_forward: [Build Enterprise scale for AKS cluster using Private cluster Bicep Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep) without deploying the workload (application)
 
 :arrow_forward:[Add the "Kubernetes cluster containers should only use allowed images" policy at RG level](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions)
 
 :arrow_forward:[Modify deployment using ES for AKS](./deployment/README.md)
-
-
-

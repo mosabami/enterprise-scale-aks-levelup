@@ -12,10 +12,6 @@ spec:
       labels:
         component: postgres
     spec:
-      volumes:
-        - name: postgres-storage
-          persistentVolumeClaim:
-            claimName: database-pvcc
       containers:
       - name: postgres
         image: postgres
@@ -25,15 +21,10 @@ spec:
             cpu: "500m"
         ports:
         - containerPort: 5432
-        volumeMounts:
-          - name: postgres-storage
-            mountPath: /var/lib/postgresql/data
-            subPath: postgres
         env:
           - name: POSTGRES_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: pgpassword
-                key: PGPASSWORD
-
-            
+            value: guest
+          - name: POSTGRES_USER
+            value: guest
+          - name: POSTGRES_DB
+            value: smartbrain

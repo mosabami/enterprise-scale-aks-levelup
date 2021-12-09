@@ -14,12 +14,32 @@ metadata:
 spec:
   tls:
     - hosts:
-      - fibcalculator.eastus.cloudapp.azure.com
+      - smartbrain.centralus.cloudapp.azure.com
       secretName: aks-tls-akv
   rules:
-    - host: fibcalculator.eastus.cloudapp.azure.com
+    - host: smartbrain.centralus.cloudapp.azure.com
       http:
         paths:
+          - path: /api/*
+            # UPDATE PATH
+            pathType: Prefix
+            # ADD PATHTYPE
+            backend:
+              service:
+                # UPDATE SERVICE FIELDS
+                name: server-service
+                port:
+                  number: 5000
+          - path: /worker/*
+            # UPDATE PATH
+            pathType: Prefix
+            # ADD PATHTYPE
+            backend:
+              service:
+                # UPDATE SERVICE FIELDS
+                name: worker-service
+                port:
+                  number: 2000
           - path: /
             # UPDATE PATH
             pathType: Prefix
@@ -30,43 +50,3 @@ spec:
                 name: client-service
                 port:
                   number: 3000
-          - path: /api/values/all
-            # UPDATE PATH
-            pathType: Prefix
-            # ADD PATHTYPE
-            backend:
-              service:
-                # UPDATE SERVICE FIELDS
-                name: server-service
-                port:
-                  number: 5000
-          - path: /api/values
-            # UPDATE PATH
-            pathType: Prefix
-            # ADD PATHTYPE
-            backend:
-              service:
-                # UPDATE SERVICE FIELDS
-                name: server-service
-                port:
-                  number: 5000
-          - path: /api/values/current
-            # UPDATE PATH
-            pathType: Prefix
-            # ADD PATHTYPE
-            backend:
-              service:
-                # UPDATE SERVICE FIELDS
-                name: server-service
-                port:
-                  number: 5000
-          - path: /api
-            # UPDATE PATH
-            pathType: Prefix
-            # ADD PATHTYPE
-            backend:
-              service:
-                # UPDATE SERVICE FIELDS
-                name: server-service
-                port:
-                  number: 5000
