@@ -7,7 +7,6 @@ metadata:
     kubernetes.io/ingress.class: 'nginx'
     nginx.ingress.kubernetes.io/use-regex: 'true'
     # ADD ANNOTATION
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
     # UPDATE ANNOTATION
 spec:
   rules:
@@ -33,3 +32,13 @@ spec:
                 name: server-service
                 port:
                   number: 5000
+          - path: /worker/?(.*)
+            # UPDATE PATH
+            pathType: Prefix
+            # ADD PATHTYPE
+            backend:
+              service:
+                # UPDATE SERVICE FIELDS
+                name: worker-service
+                port:
+                  number: 2000

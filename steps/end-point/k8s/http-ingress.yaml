@@ -34,7 +34,7 @@ spec:
                 name: worker-service
                 port:
                   number: 2000
-          - path: /*
+          - path: /
             # UPDATE PATH
             pathType: Prefix
             # ADD PATHTYPE

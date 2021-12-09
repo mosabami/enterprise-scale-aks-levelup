@@ -23,14 +23,3 @@ spec:
             value: server-service
           - name: WORKER_URL
             value: worker-service
-        volumeMounts:
-          - name: aks-tls-akv
-            mountPath: /mnt/secrets-store
-            readOnly: true
-      volumes:
-        - name: aks-tls-akv
-          csi:
-            driver: secrets-store.csi.k8s.io
-            readOnly: true
-            volumeAttributes:
-              secretProviderClass: 'aks-tls-akv'

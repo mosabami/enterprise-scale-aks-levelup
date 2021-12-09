@@ -28,5 +28,3 @@ spec:
             value: guest
           - name: POSTGRES_DB
             value: smartbrain
-
-            

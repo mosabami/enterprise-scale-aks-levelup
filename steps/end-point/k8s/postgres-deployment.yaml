@@ -23,10 +23,10 @@ spec:
         - containerPort: 5432
         env:
           - name: POSTGRES_PASSWORD
-            value: guest
+            value: 12345ASDf
           - name: POSTGRES_USER
-            value: guest
+            value: pguser
           - name: POSTGRES_DB
-            value: smartbrain
+            value: postgres
 
             

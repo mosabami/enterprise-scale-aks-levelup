@@ -55,57 +55,62 @@ In a production environment you would have to access the jumpbox using a bastion
    KV_NAME=$(az keyvault list -g ESLZ-SPOKE --query '[].name' -o tsv)
    ```
 
-8. Switch to the server folder (steps/deployment/server) and open the index.js file
+8. Switch to the server folder (steps/deployment/server) and open the index.js file. (Make sure you have copied the content of steps/starting-point to steps/deployment if you havent yet before entering the command below)
 
    ```bash
-   cd steps/deployment/server
-   code index.js
+   cd steps/deployment/smartbrainapi
+   code server.js
    ```
 
-9. Add "/api" to the beginning of the paths in line 39,43,49,55. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it.
+9. Add "/api" to the beginning of the paths in line 58,60, 62, 64, 73, 81. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it.
 
 10. Build the image for the server into the container registry you just created using the tag "v2". the original version image did not have the "/api" at the beginning of the paths.
 
     ```bash
     sudo az acr login -n $ACR_NAME
-    sudo docker build -t $ACR_NAME.azurecr.io/multi-server:v2 .
     ```
 
-11. Build image of the calculator microservice
+11. Log into the ACR using user name and password you can find in the portal (find the ACR in the spoke resource group) if it does't let you log in using AAD.
 
     ```bash
-    cd ../worker
-    sudo docker build -t $ACR_NAME.azurecr.io/multi-worker .
+    sudo docker build -t $ACR_NAME.azurecr.io/smartbrainapi:v2 .
     ```
 
-12. Build the image of the front end microservice
+12. Build image of the calculator microservice
 
     ```bash
-    cd ../client
-    sudo docker build -t $ACR_NAME.azurecr.io/multi-client .
+    cd ../smartbrainml
+    code src/app.py
     ```
 
-13. Push the built images into your private container registry
+13. Add "/worker" to the beginning of the path in line 64.
 
     ```bash
-    sudo docker push $ACR_NAME.azurecr.io/multi-worker
-    sudo docker push $ACR_NAME.azurecr.io/multi-server:v2
-
-    # import the client image from my repo instead of pushing your build as there is currently an error in the build process
-    az acr import \
-      --name $ACR_NAME \
-      --source docker.io/mosabami/multi-client \
-      --image multi-client
+    sudo docker build -t $ACR_NAME.azurecr.io/smartbrainworker:v2 .
     ```
 
-14. Get the name of the Key vault you created and replace the placeholder below with it. Then create the postgres database password as a secret in keyvault
+14. Build the image of the front end microservice
 
     ```bash
-    KV_NAME=<key vault name>
+    cd ../smartbrainclient
+    sudo docker build -t $ACR_NAME.azurecr.io/smartbrainclient .
+    ```
+
+15. Push the built images into your private container registry
+
+    ```bash
+    sudo docker push $ACR_NAME.azurecr.io/smartbrainworker:v2
+    sudo docker push $ACR_NAME.azurecr.io/smartbrainapi:v2
+    sudo docker push $ACR_NAME.azurecr.io/smartbrainclient
+    ```
+
+16. Create the postgres database password as a secret in keyvault
+
+    ```bash
     az keyvault secret set --name pgpassword --vault-name $KV_NAME --value "12345ASDf"
     ```
 
-15. Copy the redis image from Docker hub to your ACR
+17. Copy the redis image from Docker hub to your ACR
 
     ```bash
     az acr import \
@@ -114,7 +119,7 @@ In a production environment you would have to access the jumpbox using a bastion
       --image redis
     ```
 
-16. Ensure you have all 4 images that will be required for the rest of this workshop
+18. Ensure you have all 4 images that will be required for the rest of this workshop
 
     ```bash
     az acr repository list -n $ACR_NAME
@@ -124,10 +129,10 @@ In a production environment you would have to access the jumpbox using a bastion
 
     ```output
     [
-      "multi-client",
-      "multi-server",
-      "multi-worker",
-      "redis"
+      "redis",
+      "smartbrainapi",
+      "smartbrainclient",
+      "smartbrainworker"
     ]
     ```
 

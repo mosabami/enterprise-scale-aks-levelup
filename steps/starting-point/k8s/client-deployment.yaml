@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: client
-        image: mosabami/smartbrainclient:v4
+        image: mosabami/smartbrainclient
         imagePullPolicy: Always
         resources:
         ports:
