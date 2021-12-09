@@ -64,10 +64,10 @@ Repository for the Enterprise Scale for AKS LevelUp training.
 
    Below is a picture of the starting cluster the developer made
 
-   ![image-20211026151029007](./steps/deployment/media/start-state.png)
+   ![image-20211026151029007](./steps/deployment/media/starting-state.png)
 
 By the end of the workshop, we would have used Enterprise-scale for AKS to create a more secure cluster that looks like this
 
-![image-20211026151029007](./steps/deployment/media/end-state.png)
+![image-20211026151029007](./steps/deployment/media/finish-state.png)
 
 :arrow_forward: [Simulate ES for AKS workshop to gather customer requirements and make architectural decisions](./steps/ES-for-AKS.md)
