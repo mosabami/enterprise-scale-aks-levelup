@@ -497,12 +497,32 @@ Now that you have the workload working, the last step would be to add TLS to you
    spec:
      tls:
        - hosts:
-           - <DNS name label>.eastus.cloudapp.azure.com
+           - smartbrain.centralus.cloudapp.azure.com
          secretName: aks-tls-akv
      rules:
-       - host: <DNS name label>.eastus.cloudapp.azure.com
+       - host: smartbrain.centralus.cloudapp.azure.com
          http:
            paths:
+             - path: /api/*
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: server-service
+                   port:
+                     number: 5000
+             - path: /worker/*
+               # UPDATE PATH
+               pathType: Prefix
+               # ADD PATHTYPE
+               backend:
+                 service:
+                   # UPDATE SERVICE FIELDS
+                   name: worker-service
+                   port:
+                     number: 2000
              - path: /
                # UPDATE PATH
                pathType: Prefix
@@ -513,36 +533,6 @@ Now that you have the workload working, the last step would be to add TLS to you
                    name: client-service
                    port:
                      number: 3000
-             - path: /api/values/all
-               # UPDATE PATH
-               pathType: Prefix
-               # ADD PATHTYPE
-               backend:
-                 service:
-                   # UPDATE SERVICE FIELDS
-                   name: server-service
-                   port:
-                     number: 5000
-             - path: /api/values
-               # UPDATE PATH
-               pathType: Prefix
-               # ADD PATHTYPE
-               backend:
-                 service:
-                   # UPDATE SERVICE FIELDS
-                   name: server-service
-                   port:
-                     number: 5000
-             - path: /api/values/current
-               # UPDATE PATH
-               pathType: Prefix
-               # ADD PATHTYPE
-               backend:
-                 service:
-                   # UPDATE SERVICE FIELDS
-                   name: server-service
-                   port:
-                     number: 5000
    ```
 
 8. Apply the new ingress controller
@@ -555,4 +545,4 @@ Now that you have the workload working, the last step would be to add TLS to you
 
 This marks the end of the tutorial. Feel free to browse to your new website using your URL by appending https:// to the begining. This will be flagged as unsafe (Your connection isnt private warning) since we used a self signed certificate, but you can click on advanced and proceed so you can view your web page. For completeness you can go ahead and delete the port_80 inbound rule you created earlier for your appgw subnet NSG.
 
-When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/09-cleanup.md) using your local machine.
+When you are done reviewing the resources you have created, cleanup your resources by following the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep/08-cleanup.md) using your local machine.
