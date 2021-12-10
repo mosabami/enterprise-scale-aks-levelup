@@ -14,7 +14,7 @@ In a production environment you would have to access the jumpbox using a bastion
          
     ```bash
     az network public-ip create -g ESLZ-HUB -n jumpbox-PIP --sku Basic --location CentralUS
-    jumpboxpip=$(az network public-ip show -g ESLZ-HUB -n jbnic-ip --query id -o tsv)
+    jumpboxpip=$(az network public-ip show -g ESLZ-HUB -n jumpbox-PIP --query id -o tsv)
     az network nic ip-config update --name ipconfig1 --nic-name jbnic --resource-group ESLZ-HUB --public-ip-address $jumpboxpip 
     ```    
 
