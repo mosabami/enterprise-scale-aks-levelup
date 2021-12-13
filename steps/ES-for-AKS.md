@@ -1,6 +1,6 @@
 # Workshop
 
-During the workshop, we want to go over the 6 critical design areas that apply to Enterprise scale for AKS and make design decisions there. We will quickly go over the excel format:
+During the workshop, you'll make design decisions based on 6 critical design areas that apply to the [Enterprise scale for AKS](https://docs.microsoft.com/azure/cloud-adoption-framework/scenarios/aks/enterprise-scale-landing-zone). Use the following links to quickly review these areas:
 
 [Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/resources/cloud-adoption-framework?selectedassetcontainerid=a59160d5-6a62-45df-bd1a-04c7a88a1c66#ready)
 
