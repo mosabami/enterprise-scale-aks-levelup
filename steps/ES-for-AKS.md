@@ -2,7 +2,7 @@
 
 During the workshop, we want to go over the 6 critical design areas that apply to Enterprise scale for AKS and make design decisions there. We will quickly go over the excel format:
 
-[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/resources/cloud-adoption-framework?selectedassetcontainerid=a59160d5-6a62-45df-bd1a-04c7a88a1c66#ready)
+[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/download/a59160d5-6a62-45df-bd1a-04c7a88a1c66)
 
 [Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
 
