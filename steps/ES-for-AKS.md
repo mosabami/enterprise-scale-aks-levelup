@@ -2,7 +2,7 @@
 
 During the workshop, we want to go over the 6 critical design areas that apply to Enterprise scale for AKS and make design decisions there. We will quickly go over the excel format:
 
-[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/resources/cloud-adoption-framework?selectedassetcontainerid=a59160d5-6a62-45df-bd1a-04c7a88a1c66#ready)
+[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/download/a59160d5-6a62-45df-bd1a-04c7a88a1c66)
 
 [Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
 
@@ -11,6 +11,8 @@ During the workshop, we want to go over the 6 critical design areas that apply t
 ## Next steps
 
 :arrow_forward: [Build Enterprise scale for AKS cluster using Private cluster Bicep Scenario](https://github.com/Azure/Enterprise-Scale-for-AKS/tree/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep) without deploying the workload (application)
+
+:green_book: Link for a command line deployment reference: [Deployment CLI](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep/deployment.azcli)
 
 :arrow_forward:[Add the "Kubernetes cluster containers should only use allowed images" policy at RG level](https://portal.azure.com/#blade/Microsoft_Azure_Policy/PolicyMenuBlade/Definitions)
 

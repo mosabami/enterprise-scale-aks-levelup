@@ -1,0 +1,54 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "rgName": {
+        "value": "ESLZ-SPOKE"
+      },
+      "administrator_login": {
+        "value": "postgres"
+      },
+      "administrator_login_password": {
+        "value": "12345ASDf"
+      },
+      "auto_grow_enabled": {
+        "value": "Enabled"
+      },
+      "backup_retention_days": {
+        "value": 7
+      },
+      "geo_redundant_backup_enabled": {
+        "value": "Disabled"
+      },
+      "sku_name": {
+        "value": "GP_Gen5_2"
+      },      
+      "ssl_enforcement_enabled": {
+        "value": "Disabled"
+      },
+      "storage_mb": {
+        "value": 51200
+      },
+      "publicNetworkAccess": {
+        "value": "Disabled"
+      },
+      "name": {
+        "value": "postgresql-00000001"
+      },
+      "privateEndpointPostgressName": {
+        "value": "postgres-pe"
+      },
+      "vnetName": {
+        "value": "VNet-SPOKE"
+      },
+      "subnetName": {
+        "value": "servicespe"
+      },
+      "vnetHUBRGName": {
+        "value": "ESLZ-HUB"
+      },
+      "vnetHubName": {
+        "value": "VNet-HUB"
+      }         
+    }
+  }

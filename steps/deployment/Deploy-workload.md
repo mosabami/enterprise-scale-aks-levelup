@@ -33,42 +33,32 @@ Now that our environment is all setup, we will begin the steps required to deplo
 6. Change the client deployment code so that it points to your ACR
 
    ```yaml
-   apiVersion: apps/v1
-   kind: Deployment
-   metadata:
-     name: client-deployment
-   spec:
-     replicas: 2
-     selector:
-       matchLabels:
-         component: web
-     template:
-       metadata:
-         labels:
-           component: web
-       spec:
-         containers:
-           - name: client
-             image: <acr name>.azurecr.io/smartbrainclient
-             imagePullPolicy: Always
-             ports:
-               - containerPort: 3000
-             readinessProbe: # is the container ready to receive traffic?
-               initialDelaySeconds: 10
-               httpGet:
-                 port: 3000
-                 path: /healthz
-             livenessProbe: # is the container healthy?
-               initialDelaySeconds: 2
-               periodSeconds: 5
-               httpGet:
-                 port: 3000
-                 path: /healthz
-             env:
-               - name: SERVER_URL
-                 value: server-service
-               - name: WORKER_URL
-                 value: worker-service
+    apiVersion: apps/v1
+    kind: Deployment
+    metadata:
+      name: client-deployment
+    spec:
+      replicas: 1
+      selector:
+        matchLabels:
+          component: web
+      template:
+        metadata:
+          labels:
+            component: web
+        spec:
+          containers:
+          - name: client
+            image: <acr name>.azurecr.io/smartbrainclient
+            imagePullPolicy: Always
+            resources:
+            ports:
+            - containerPort: 3000
+            env:
+              - name: SERVER_URL
+                value: server-service
+              - name: WORKER_URL
+                value: worker-service
    ```
 
 7. Deploy the client pod and the client service

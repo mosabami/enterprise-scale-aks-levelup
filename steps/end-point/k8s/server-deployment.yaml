@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: server
-        image: eslzacr7z6cmpr2wmwso.azurecr.io/smartbrainapi:v8
+        image: <ACR Name>.azurecr.io/smartbrainapi:v2
         imagePullPolicy: Always
         volumeMounts:
           - name: secrets-store-inline
@@ -28,9 +28,9 @@ spec:
           - name:  REDIS_PORT
             value: '6379'
           - name: PGUSER
-            value: pguser@awesomepgggserver
+            value: pguser@<Postgress Name>
           - name: PGHOST
-            value: awesomepgggserver.postgres.database.azure.com
+            value: <Postgress Name>.postgres.database.azure.com
           - name: PGPORT
             value: '5432'
           - name: PGDATABASE

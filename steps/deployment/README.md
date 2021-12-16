@@ -8,6 +8,37 @@ Now that you have completed creating the main Azure resources, the next step is 
 
 3. SSH into the jumpbox vm you created, using Visual Studio code using the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#option-1-connecting-into-the-server-dev-linux-vm-using-ssh-and-vs-code). All the steps below need to be done from the jumpbox because your AKS, Key vault and ACR resources can only be accessed from within the same virtual network. We are using visual studio code because it is easy to manipulate files in your virtual machine using it.
 
+In a production environment you would have to access the jumpbox using a bastion host. But it wouldn't allow you to use Visual Studio or SSH because of the network restrictions. Follow this steps to allow external access to the jumpbox to your external IP address:
+
+    - Create a Public IP Address.
+         
+    ```bash
+    az network public-ip create -g ESLZ-HUB -n jumpbox-PIP --sku Basic --location CentralUS
+    jumpboxpip=$(az network public-ip show -g ESLZ-HUB -n jumpbox-PIP --query id -o tsv)
+    az network nic ip-config update --name ipconfig1 --nic-name jbnic --resource-group ESLZ-HUB --public-ip-address $jumpboxpip 
+    ```    
+
+    - Add a route to your Public IP with destination Internet.
+    
+    You can access the internet and check your public IP address and change the variable $homeip bellow or try to run the script to automatically do it for you.
+
+    ```bash
+    homeip=$(curl ifconfig.co -4)
+    az network route-table route create -n HOME --route-table-name vm-subnet-rt -g ESLZ-HUB --next-hop-type Internet --address-prefix $homeip/32
+    ```
+     
+    - Create a Azure Firewall rule to allow internet access to the Jumpbox.
+    
+    ```bash
+    az network firewall network-rule create -f AZFW -g ESLZ-HUB -c AKS-Egress --protocols Any --destination-addresses '*' --destination-ports '*' --source-addresses 10.0.3.0/24 -n Allow-Jumpbox-Internet-Access
+    ```
+
+    - Allow application to download pictures on internet
+    
+    ```bash
+    az network firewall network-rule create -f AZFW -g ESLZ-HUB -c AKS-Egress --protocols Any --destination-addresses '*' --destination-ports '*' --source-addresses 10.1.1.0/24 -n Allow-AKS-App-Picture-Download
+    ```
+    
 4. Install the required tools in your new virtual machine using the instructions [here](./portgress-resource-deployment/setupVM.md)
 
 5. Clone this repository and cd to the folder
@@ -17,14 +48,17 @@ Now that you have completed creating the main Azure resources, the next step is 
    cd enterprise-scale-aks-levelup
    ```
 
-6. Copy the content of the steps/starting-point folder in your cloned repo in the vm into the steps/deployment folder.
+6. Copy the content of the steps/end-point folder in your cloned repo in the vm into the steps/deployment folder.
+
+    ```bash
+    cp -R steps/end-point/* steps/deployment/
+    ```
 
 7. Get your ACR name and replace the placeholder below with your ACR name
 
    ```bash
-   ACR_NAME=$(az deployment sub show -n "ESLZ-AKS-Supporting" --query properties.outputs.acrName.value -o tsv)
-   KV_NAME=$(az deployment sub show -n "ESLZ-AKS-Supporting" --query properties.outputs.keyvaultName.value -o tsv)
-
+   ACR_NAME=$(az acr list -g ESLZ-SPOKE --query '[].name' -o tsv)
+   KV_NAME=$(az keyvault list -g ESLZ-SPOKE --query '[].name' -o tsv)
    ```
 
 8. Switch to the server folder (steps/deployment/server) and open the index.js file. (Make sure you have copied the content of steps/starting-point to steps/deployment if you havent yet before entering the command below)

@@ -18,7 +18,7 @@ spec:
             claimName: redis-persistent-volume-claim
       containers:
         - name: redis
-          image: eslzacr7z6cmpr2wmwso.azurecr.io/redis
+          image: <ACR Name>.azurecr.io/redis
           imagePullPolicy: Always
           resources:
             limits:
