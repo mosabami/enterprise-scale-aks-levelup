@@ -4,7 +4,7 @@ During the workshop, you'll make design decisions based on 6 critical design are
 
 [Enterprise-scale for AKS delivery guide](https://microsoft-my.sharepoint.com/:p:/p/aayodeji/EURaTZ97tyZFuT90INskRvYBYjjExdJCLIyRdejiZYMyXw?e=OkZc1a)
 
-[Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
+[Enterprise-Scale-for-AKS sample workshop template](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/materials/Enterprise%20Scale%20AKS%20workshop%20checklist.xlsm)
 
 [ADO template project](https://dev.azure.com/cts-dem-demoorg/CTS-DEM-Playbooks/_backlogs/backlog/CTS-DEM-Playbooks%20Team/Epics)
 
