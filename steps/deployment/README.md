@@ -6,9 +6,7 @@ Now that you have completed creating the main Azure resources, the next step is 
 
 2. Follow the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Bicep/07-workload.md#provide-yourself-access-to-create-secrets-in-your-key-vault) to provide yourself access to create secrets in Key vault (don't deploy the workload)
 
-3. SSH into the jumpbox vm you created, using Visual Studio code using the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#option-1-connecting-into-the-server-dev-linux-vm-using-ssh-and-vs-code). All the steps below need to be done from the jumpbox because your AKS, Key vault and ACR resources can only be accessed from within the same virtual network. We are using visual studio code because it is easy to manipulate files in your virtual machine using it.
-
-In a production environment you would have to access the jumpbox using a bastion host. But it wouldn't allow you to use Visual Studio or SSH because of the network restrictions. Follow this steps to allow external access to the jumpbox to your external IP address:
+3. In a production environment you would have to access the jumpbox using a bastion host. But it wouldn't allow you to use Visual Studio or SSH because of the network restrictions. Follow this steps to allow external access to the jumpbox to your external IP address:
 
     - Create a Public IP Address.
          
@@ -38,39 +36,41 @@ In a production environment you would have to access the jumpbox using a bastion
     ```bash
     az network firewall network-rule create -f AZFW -g ESLZ-HUB -c AKS-Egress --protocols Any --destination-addresses '*' --destination-ports '*' --source-addresses 10.1.1.0/24 -n Allow-AKS-App-Picture-Download
     ```
-    
-4. Install the required tools in your new virtual machine using the instructions [here](./portgress-resource-deployment/setupVM.md)
+4. SSH into the jumpbox vm you created, using Visual Studio code using the instructions [here](https://github.com/Azure/Enterprise-Scale-for-AKS/blob/main/Scenarios/AKS-Secure-Baseline-PrivateCluster/Terraform/08-workload.md#option-1-connecting-into-the-server-dev-linux-vm-using-ssh-and-vs-code). All the steps below need to be done from the jumpbox because your AKS, Key vault and ACR resources can only be accessed from within the same virtual network. We are using visual studio code because it is easy to manipulate files in your virtual machine using it.
 
-5. Clone this repository and cd to the folder
+   
+5. Install the required tools in your new virtual machine using the instructions [here](./portgress-resource-deployment/setupVM.md)
+
+6. Clone this repository and cd to the folder
 
    ```bash
    git clone https://github.com/mosabami/enterprise-scale-aks-levelup
    cd enterprise-scale-aks-levelup
    ```
 
-6. Copy the content of the steps/end-point folder in your cloned repo in the vm into the steps/deployment folder.
+7. Copy the content of the steps/end-point folder in your cloned repo in the vm into the steps/deployment folder.
 
     ```bash
     cp -R steps/end-point/* steps/deployment/
     ```
 
-7. Get your ACR name and replace the placeholder below with your ACR name
+8. Get your ACR name and replace the placeholder below with your ACR name
 
    ```bash
    ACR_NAME=$(az acr list -g ESLZ-SPOKE --query '[].name' -o tsv)
    KV_NAME=$(az keyvault list -g ESLZ-SPOKE --query '[].name' -o tsv)
    ```
 
-8. Switch to the server folder (steps/deployment/server) and open the index.js file. (Make sure you have copied the content of steps/starting-point to steps/deployment if you havent yet before entering the command below)
+9. Switch to the server folder (steps/deployment/server) and open the index.js file. (Make sure you have copied the content of steps/starting-point to steps/deployment if you havent yet before entering the command below)
 
    ```bash
    cd steps/deployment/smartbrainapi
    code server.js
    ```
 
-9. Add "/api" to the beginning of the paths in line 58,60, 62, 64, 73, 81. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it.
+10. Add "/api" to the beginning of the paths in line 58,60, 62, 64, 73, 81. This is because AGIC does not have the nginx ingress controller feature that allows you to rewrite target path. More details on this later. Save it.
 
-10. Build the image for the server into the container registry you just created using the tag "v2". the original version image did not have the "/api" at the beginning of the paths.
+11. Build the image for the server into the container registry you just created using the tag "v2". the original version image did not have the "/api" at the beginning of the paths.
 
     ```bash
     sudo az acr login -n $ACR_NAME
