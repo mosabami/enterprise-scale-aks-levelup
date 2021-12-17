@@ -2,7 +2,7 @@
 
 During the workshop, you'll make design decisions based on 6 critical design areas that apply to the [Enterprise scale for AKS](https://docs.microsoft.com/azure/cloud-adoption-framework/scenarios/aks/enterprise-scale-landing-zone). Use the following links to quickly review these areas:
 
-[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/download/a59160d5-6a62-45df-bd1a-04c7a88a1c66)
+[Enterprise-scale for AKS delivery guide](https://gearup.microsoft.com/download/9c54714a-76e9-46a0-80e8-1de9af8c39e1)
 
 [Enterprise-Scale-for-AKS sample workshop template](https://microsoft.sharepoint.com/:x:/t/NorthStarPlaybookWorkshop/Ebds5Le_2eRBno1hudB5tUABcmdLJipYcF3OIAiRtCSDgA?e=SW55RB)
 
